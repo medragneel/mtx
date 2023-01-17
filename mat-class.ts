@@ -3,20 +3,22 @@ export class Mtx {
     constructor(m: number[][]) {
         this.m = m
     }
+    // preety print of matrix
     pprint(): void {
         this.m.map(r => console.log(r))
-
     }
+    // length of matrix or row of a amtrix
     len(): number {
         return this.m.length
 
     }
+    // a tuple of nrows and ncols of matrix
     shape(): [number, number] {
         const r = this.m.length
         const c = this.m[0].length
         return [r, c]
     }
-    createMat(nrows: number, ncols: number): number[][] {
+    private createMat(nrows: number, ncols: number): number[][] {
         let nm: number[][] = []
         for (let i = 0; i < nrows; i++) {
             nm.push([])
@@ -80,6 +82,43 @@ export class Mtx {
         return new Mtx(nm)
 
     }
+    smul(m: number[][], s: number): Mtx {
+        for (let i = 0; i < m.length; i++) {
+            for (let j = 0; j < m[0].length; j++) {
+                m[i][j] *= s
+
+            }
+
+        }
+        return new Mtx(m)
+    }
+    transpose(m: number[][]): Mtx {
+        let mt: number[][] = this.createMat(m[0].length, m.length)
+        for (let i = 0; i < m.length; i++) {
+            for (let j = 0; j < m[0].length; j++) {
+                mt[j][i] = m[i][j]
+
+            }
+        }
+
+        return new Mtx(mt)
+    }
+    trace(m:number[][]):number{
+        if (m.length !== m[0].length) {
+            throw new Error("matrix is not a square matrix")
+            
+        }
+        let T = 0
+        for (let i = 0; i < m.length; i++) {
+           for (let j = 0; j < m[0].length; j++) {
+               if (i === j) {
+                   T += m[i][j] 
+               }
+           } 
+        }
+        return T
+
+    }
 
 }
 
@@ -98,14 +137,25 @@ b.pprint();
 console.log(b.shape())
 
 console.log("------------");
-const A = [[1, 2, 3],[4,5,6]]
-const B = [[7,8],[9,10],[11,12]]
+const A = [[1, 2, 3], [4, 5, 6]]
+const B = [[7, 8], [9, 10], [11, 12]]
 
-const c = mat.mul(A,B);
+const c = mat.mul(A, B);
 c.pprint();
 // console.log(c.shape())
 
 
+// const mtt = [[1, 1, 2], [1, 2, 1], [2, 1, 1]]
+console.log("------------");
 
+const s = [[10, 6], [4, 3]]
+
+mat.smul(s, 2).pprint()
+
+console.log("------------");
+
+const T = [[2,-9,3],[13,11,-17],[3,6,15],[4,13,1]]
+mat.transpose(T).pprint()
+console.log(mat.trace(s))
 
 
