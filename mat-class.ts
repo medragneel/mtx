@@ -8,7 +8,7 @@ export class Mtx {
         this.m.map(r => console.log(r))
     }
     // length of matrix or row of a amtrix
-    len(): number {
+    ndim(): number {
         return this.m.length
 
     }
@@ -103,29 +103,65 @@ export class Mtx {
 
         return new Mtx(mt)
     }
-    trace(m:number[][]):number{
+    trace(m: number[][]): number {
         if (m.length !== m[0].length) {
             throw new Error("matrix is not a square matrix")
-            
+
         }
         let T = 0
         for (let i = 0; i < m.length; i++) {
-           for (let j = 0; j < m[0].length; j++) {
-               if (i === j) {
-                   T += m[i][j] 
-               }
-           } 
+            for (let j = 0; j < m[0].length; j++) {
+                if (i === j) {
+                    T += m[i][j]
+                }
+            }
         }
         return T
 
     }
+    diag(m: number[][]): number[] {
 
+        if (m.length !== m[0].length) {
+            throw new Error("matrix is not a square matrix")
+
+        }
+        const arr: number[] = []
+        for (let i = 0; i < m.length; i++) {
+            for (let j = 0; j < m[0].length; j++) {
+                if (i === j) {
+                    arr.push(m[i][j])
+                }
+            }
+        }
+        return arr
+    }
+    identity(): Mtx {
+        const n = this.m.length
+        let mt = this.createMat(n, n)
+        for (let i = 0; i < mt.length; i++) {
+            for (let j = 0; j < mt.length; j++) {
+                if (i === j) {
+                    mt[i][j] = 1
+
+                }
+
+            }
+
+        }
+
+        return new Mtx(mt)
+
+    }
 }
 
 
 const mat = new Mtx([[1, 2], [3, 4], [5, 6]])
+// mat.identity().pprint();
+
+
+
 mat.pprint();
-console.log(mat.len());
+console.log(mat.ndim());
 console.log(mat.shape());
 const a = mat.sub([[1, 2], [3, 4], [2, 5]], [[5, 6], [7, 8], [1, 2]]);
 a.pprint();
@@ -150,12 +186,14 @@ console.log("------------");
 
 const s = [[10, 6], [4, 3]]
 
+
 mat.smul(s, 2).pprint()
 
 console.log("------------");
 
-const T = [[2,-9,3],[13,11,-17],[3,6,15],[4,13,1]]
+const T = [[2, -9, 3], [13, 11, -17], [3, 6, 15], [4, 13, 1]]
 mat.transpose(T).pprint()
 console.log(mat.trace(s))
 
+console.log(mat.diag([[1, 2, 3], [4, 5, 6], [7, 8, 9]]));
 
